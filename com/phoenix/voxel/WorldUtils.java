@@ -3,19 +3,32 @@ package com.phoenix.voxel;
 import com.sudoplay.joise.module.ModuleAutoCorrect;
 import com.sudoplay.joise.module.ModuleBasisFunction.BasisType;
 import com.sudoplay.joise.module.ModuleFractal;
-import com.sudoplay.joise.module.ModuleBasisFunction.InterpolationType;
 import com.sudoplay.joise.module.ModuleFractal.FractalType;
-import com.sudoplay.joise.module.ModuleScaleDomain;
 
+/**
+ * WorldUtils Class
+ * 
+ * @author Phoenix Enero
+ */
 public class WorldUtils {
 	private long seed;
 	public ModuleAutoCorrect heightMap;
 	
+	/**
+	 * Creates new WorldUtils class with a specific seed for the world generators
+	 * 
+	 * @param seed the seed for the world generators
+	 */
 	public WorldUtils(long seed) {
 		this.seed = seed;
 		heightMap = new ModuleAutoCorrect();
 	}
 	
+	/**
+	 * Generates heightmap
+	 * 
+	 * @param octaves Number of octaves
+	 */
 	public void GenerateHeightMap(int octaves) {
 		ModuleFractal fracNoise = new ModuleFractal();
 		fracNoise.setSeed(seed);
@@ -28,6 +41,16 @@ public class WorldUtils {
 		heightMap.calculate();
 	}
 	
+	/**
+	 * Generates terrain based on the heightmap
+	 * 
+	 * @param blocks a 3D block array
+	 * @param groundLevel the ground level of the map
+	 * @param maxHeight the maximum height of the map
+	 * @param scale how large are the features
+	 * @param ox x offset
+	 * @param oz z offset
+	 */
 	public void GenerateHeightMapTerrain(Block[][][] blocks, 
 										 int groundLevel,
 										 int maxHeight,

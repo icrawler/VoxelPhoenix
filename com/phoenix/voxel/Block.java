@@ -1,5 +1,10 @@
 package com.phoenix.voxel;
 
+/**
+ * Block Class
+ * 
+ * @author Phoenix Enero
+ */
 public class Block {
 	public boolean active;
 	private int blockType;

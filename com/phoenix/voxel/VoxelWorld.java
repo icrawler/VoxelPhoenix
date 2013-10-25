@@ -5,6 +5,11 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.lights.Lights;
 
+/**
+ * VoxelWorld Class
+ * 
+ * @author Phoenix Enero
+ */
 public class VoxelWorld {
 	public int ViewDistance;
 	public Chunk[][] activeChunks;
@@ -15,6 +20,12 @@ public class VoxelWorld {
 	public PerspectiveCamera mainCamera;
 	public VoxelCamInputController camController;
 
+	/**
+	 * Creates a new VoxelWorld. Hooray!
+	 * 
+	 * @param viewDistance the view distance of the world
+	 * @param worldSeed the seed of the world
+	 */
 	public VoxelWorld(int viewDistance, long worldSeed) {
 		this.ViewDistance = viewDistance;
 		activeChunks = new Chunk[2*viewDistance+1][2*viewDistance+1];
@@ -39,6 +50,9 @@ public class VoxelWorld {
 		worldGen.GenerateHeightMap(2);
 	}
 	
+	/**
+	 * Disposes of the resources
+	 */
 	public void dispose() {
 		for (int z=0; z < 2*ViewDistance+1; z++) {
 			for (int x=0; x < 2*ViewDistance+1; x++) {
@@ -47,6 +61,9 @@ public class VoxelWorld {
 		}
 	}
 	
+	/**
+	 * Rebuilds chunks
+	 */
 	public void rebuildChunks() {
 		for (int z=0; z < 2*ViewDistance+1; z++) {
 			for (int x=0; x < 2*ViewDistance+1; x++) {
@@ -68,15 +85,24 @@ public class VoxelWorld {
 		}
 	}
 	
+	/**
+	 * Prints the coordinates of each chunk
+	 */
 	public void printChunks() {
 		for (int z=0; z < 2*ViewDistance+1; z++) {
 			for (int x=0; x < 2*ViewDistance+1; x++) {
-				System.out.println("Current Chunk. x: " + x + ", y:" + z);
+				System.out.println("Current Chunk. x: " + x + ", z:" + z);
 				//activeChunks[z][x].GenerateChunkAltitudes();
 			}
 		}
 	}
 	
+	/**
+	 * Renders the chunks
+	 * 
+	 * @param batch the ModelBatch for rendering
+	 * @param lights the lights for lighting... duh.
+	 */
 	public void renderChunks(ModelBatch batch, Lights lights) {
 		for (int z=0; z < 2*ViewDistance+1; z++) {
 			for (int x=0; x < 2*ViewDistance+1; x++) {

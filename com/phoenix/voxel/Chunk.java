@@ -4,6 +4,12 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 
+/**
+ * Chunk Class
+ * 
+ * @author Phoenix Enero
+ */
+
 public class Chunk {
 	public Block[][][] blocks;
 	public int blockSize;
@@ -15,6 +21,7 @@ public class Chunk {
 	//private BlockCreator blockCreator;
 	public ModelInstance chunkInstance;
 	public BlockFace[][][][] blockFaces;
+	
 	
 	public Chunk(long worldSeed, int x, int y) {
 		blockSize = 16;

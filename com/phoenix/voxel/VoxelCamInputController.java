@@ -7,13 +7,19 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 
+
+/**
+ * VoxelCamInputController Class
+ * 
+ * @author Phoenix Enero
+ */
 public class VoxelCamInputController extends InputAdapter {
 	/** The button for rotating the camera. */ 
-	public int rotateButton = Buttons.LEFT;
+	public int rotateButton = Buttons.RIGHT;
 	/** The angle to rotate when moved the full width or height of the screen. */
 	public float rotateAngle = 360f;
 	/** The button for translating the camera along the up/right plane */
-	public int translateButton = Buttons.RIGHT;
+	//public int translateButton = Buttons.RIGHT;
 	/** The units to translate the camera when moved the full width or height of the screen. */
 	public float translateUnits = 10f; // FIXME auto calculate this based on the target
 	/** The button for translating the camera along the direction axis */
@@ -40,10 +46,10 @@ public class VoxelCamInputController extends InputAdapter {
 	protected boolean forwardPressed;
 	public int backwardKey = Keys.S;
 	protected boolean backwardPressed;
-	public int rotateRightKey = Keys.A;
-	protected boolean rotateRightPressed;
-	public int rotateLeftKey = Keys.D;
-	protected boolean rotateLeftPressed;
+	public int leftKey = Keys.A;
+	protected boolean leftKeyPressed;
+	public int rightKey = Keys.D;
+	protected boolean rightKeyPressed;
 	/** The camera. */
 	public Camera camera;
 	/** The current (first) button being pressed. */
@@ -53,24 +59,29 @@ public class VoxelCamInputController extends InputAdapter {
 	private final Vector3 tmpV1 = new Vector3();
 	private final Vector3 tmpV2 = new Vector3();
 	
+	public int nearDistance = 0;
+	public int farDistance = 512;
+	
 	public VoxelCamInputController(final Camera camera) {
 		this.camera = camera;
 	}
 	
 	public void update() {
-		if (rotateRightPressed || rotateLeftPressed || forwardPressed || backwardPressed) {
+		if (leftKeyPressed || rightKeyPressed || forwardPressed || backwardPressed) {
 			final float delta = Gdx.graphics.getDeltaTime();
-			if (rotateRightPressed) {
+			if (leftKeyPressed) {
 				camera.translate(tmpV1.set(camera.direction.x, 0, camera.direction.z)
 					  .rotate(90, 0, 1, 0)
 					  .nor()
 					  .scl(delta * translateUnits));
+				target.add(tmpV1);
 			}
-			if (rotateLeftPressed) {
+			if (rightKeyPressed) {
 				camera.translate(tmpV1.set(camera.direction.x, 0, camera.direction.z)
 					  .rotate(-90, 0, 1, 0)
 					  .nor()
 					  .scl(delta * translateUnits));
+				target.add(tmpV1);
 			}
 			if (forwardPressed) {
 				camera.translate(tmpV1.set(camera.direction).scl(delta * translateUnits));
@@ -82,8 +93,17 @@ public class VoxelCamInputController extends InputAdapter {
 				if (forwardTarget)
 					target.add(tmpV1);
 			}
+			limitViewDistance();
 			if (autoUpdate)
 				camera.update();
+		}
+	}
+	
+	private void limitViewDistance() {
+		float dist = tmpV1.set(camera.position).sub(target).len();
+		if (dist > farDistance) {
+			tmpV1.set(target).sub(camera.position).nor().scl(farDistance);
+			camera.position.set(target).sub(tmpV1);
 		}
 	}
 	
@@ -109,12 +129,12 @@ public class VoxelCamInputController extends InputAdapter {
 			tmpV1.set(camera.direction).crs(camera.up).y = 0f;
 			camera.rotateAround(target, tmpV1.nor(), deltaY * rotateAngle);
 			camera.rotateAround(target, Vector3.Y, deltaX * -rotateAngle);
-		} else if (button == translateButton) {
+		}/* else if (button == translateButton) {
 			camera.translate(tmpV1.set(camera.direction).crs(camera.up).nor().scl(-deltaX * translateUnits));
 			camera.translate(tmpV2.set(camera.up).scl(-deltaY * translateUnits));
 			if (translateTarget)
 				target.add(tmpV1).add(tmpV2);				
-		} else if (button == forwardButton) {
+		}*/ else if (button == forwardButton) {
 			camera.translate(tmpV1.set(camera.direction).scl(deltaY * translateUnits));
 			if (forwardTarget)
 				target.add(tmpV1);
@@ -139,9 +159,17 @@ public class VoxelCamInputController extends InputAdapter {
 	public boolean scrolled (int amount) {
 		if (!alwaysScroll && activateKey != 0 && !activatePressed)
 			return false;
-		camera.translate(tmpV1.set(camera.direction).scl(amount * scrollFactor * translateUnits));
-		if (scrollTarget)
-			target.add(tmpV1);
+		tmpV1.set(camera.direction)
+		.scl(amount * scrollFactor * translateUnits)
+		.add(camera.position)
+		.sub(target);
+		if (tmpV1.dot(tmpV2.set(camera.position).sub(target)) > 0) {
+			camera.translate(tmpV1.set(camera.direction)
+							 .scl(amount * scrollFactor * translateUnits));
+			if (scrollTarget)
+				target.add(tmpV1);
+		}
+		limitViewDistance();
 		if (autoUpdate)
 			camera.update();
 		return true;
@@ -155,10 +183,10 @@ public class VoxelCamInputController extends InputAdapter {
 			forwardPressed = true;
 		else if (keycode == backwardKey)
 			backwardPressed = true;
-		else if (keycode == rotateRightKey)
-			rotateRightPressed = true;
-		else if (keycode == rotateLeftKey)
-			rotateLeftPressed = true;
+		else if (keycode == leftKey)
+			leftKeyPressed = true;
+		else if (keycode == rightKey)
+			rightKeyPressed = true;
 		return false;
 	}
 	
@@ -172,10 +200,10 @@ public class VoxelCamInputController extends InputAdapter {
 			forwardPressed = false;
 		else if (keycode == backwardKey)
 			backwardPressed = false;
-		else if (keycode == rotateRightKey)
-			rotateRightPressed = false;
-		else if (keycode == rotateLeftKey)
-			rotateLeftPressed = false;
+		else if (keycode == leftKey)
+			leftKeyPressed = false;
+		else if (keycode == rightKey)
+			rightKeyPressed = false;
 		return false;
 	}
 }

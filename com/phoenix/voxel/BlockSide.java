@@ -1,5 +1,10 @@
 package com.phoenix.voxel;
 
+/**
+ * BlockSide Class
+ * 
+ * @author Phoenix Enero
+ */
 public class BlockSide {
 	public int lightLevel;
 	

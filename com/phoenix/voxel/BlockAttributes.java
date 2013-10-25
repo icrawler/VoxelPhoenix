@@ -2,6 +2,11 @@ package com.phoenix.voxel;
 
 import com.badlogic.gdx.graphics.Color;
 
+/**
+ * BlockAttributes Class
+ * 
+ * @author Phoenix Enero
+ */
 public class BlockAttributes {
 	public static class Types {
 		public static int Default = 0;

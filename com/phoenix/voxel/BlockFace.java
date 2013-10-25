@@ -7,6 +7,11 @@ import com.badlogic.gdx.graphics.g3d.materials.Material;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 
+/**
+ * BlockFace Class
+ * 
+ * @author Phoenix Enero
+ */
 public class BlockFace {
 	public int x;
 	public int y;

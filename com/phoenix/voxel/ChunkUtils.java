@@ -1,5 +1,10 @@
 package com.phoenix.voxel;
 
+/**
+ * ChunkUtils Class
+ * 
+ * @author Phoenix Enero
+ */
 public class ChunkUtils {
 
 	public static BlockFace[][][][] OptimizeChunkMesh(BlockFace[][][][] chunkFaces) {
@@ -23,8 +28,10 @@ public class ChunkUtils {
 	 					if (x == 15) {
 	 						if (currentLength != 0 && prevLength == 0)
 	 							result[y][z][15][2+i] = new BlockFace(15, y, z, currentLength, 1, 2+i, currentType);
-	 						else if (prevLength != 0)
+	 						else if (prevLength != 0 && currentType == prevType)
 	 							result[y][z][x-prevLength][2+i] = new BlockFace(x-prevLength, y, z, prevLength+1, 1, 2+i, prevType);
+	 						else if (prevLength != 0 && currentType != prevType)
+	 							result[y][z][x-prevLength][2+i] = new BlockFace(x-prevLength, y, z, prevLength, 1, 2+i, prevType);
 	 						prevLength = 0;
 	 						prevType = 0;
 	 						break;
@@ -67,8 +74,10 @@ public class ChunkUtils {
 	 					if (x == 15) {
 	 						if (currentLength != 0 && prevLength == 0)
 	 							result[y][z][15][i] = new BlockFace(15, y, z, currentLength, 1, i, currentType);
-	 						else if (prevLength != 0)
+	 						else if (prevLength != 0 && currentType == prevType)
 	 							result[y][z][x-prevLength][i] = new BlockFace(x-prevLength, y, z, prevLength+1, 1, i, prevType);
+	 						else if (prevLength != 0 && currentType != prevType)
+	 							result[y][z][x-prevLength][i] = new BlockFace(x-prevLength, y, z, prevLength, 1, i, prevType);
 	 						break;
 	 					}
 	 					
@@ -109,8 +118,10 @@ public class ChunkUtils {
 	 					if (z == 15) {
 	 						if (currentLength != 0 && prevLength == 0)
 	 							result[y][15][x][4+i] = new BlockFace(x, y, 15, currentLength, 1, 4+i, currentType);
-	 						else if (prevLength != 0)
+	 						else if (prevLength != 0 && currentType == prevType)
 	 							result[y][z-prevLength][x][4+i] = new BlockFace(x, y, z-prevLength, prevLength+1, 1, 4+i, prevType);
+	 						else if (prevLength != 0 && currentType != prevType)
+	 							result[y][z-prevLength][x][4+i] = new BlockFace(x, y, z-prevLength, prevLength, 1, 4+i, prevType);
 	 						break;
 	 					}
 	 					
