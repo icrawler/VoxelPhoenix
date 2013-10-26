@@ -59,11 +59,12 @@ public class VoxelCamInputController extends InputAdapter {
 	private final Vector3 tmpV1 = new Vector3();
 	private final Vector3 tmpV2 = new Vector3();
 	
-	public int nearDistance = 0;
-	public int farDistance = 512;
+	private Boolean fpm = false;
+	private int farDistance = 512;
 	
-	public VoxelCamInputController(final Camera camera) {
+	public VoxelCamInputController(final Camera camera, int farDistance) {
 		this.camera = camera;
+		this.farDistance = farDistance;
 	}
 	
 	public void update() {
@@ -163,16 +164,35 @@ public class VoxelCamInputController extends InputAdapter {
 		.scl(amount * scrollFactor * translateUnits)
 		.add(camera.position)
 		.sub(target);
-		if (tmpV1.dot(tmpV2.set(camera.position).sub(target)) > 0) {
-			camera.translate(tmpV1.set(camera.direction)
-							 .scl(amount * scrollFactor * translateUnits));
+		if (tmpV1.dot(tmpV2.set(camera.position).sub(target)) > 0 || fpm == true) {
+			if (fpm == true && amount != 1) {
+				tmpV1.set(0, 0, 0);
+			}
+			else
+				tmpV1.set(camera.direction)
+				 .scl(amount * scrollFactor * translateUnits);
+			camera.translate(tmpV1);
 			if (scrollTarget)
 				target.add(tmpV1);
+			fpm = false;
+		}
+		else
+		{
+			camera.position.set(target);
+			fpm = true;
 		}
 		limitViewDistance();
 		if (autoUpdate)
 			camera.update();
 		return true;
+	}
+	
+	/**
+	 * Forces first person mode
+	 */
+	public void forceFPM() {
+		camera.position.set(target);
+		fpm = true;
 	}
 	
 	@Override

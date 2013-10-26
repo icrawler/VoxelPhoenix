@@ -11,13 +11,13 @@ import com.badlogic.gdx.graphics.g3d.lights.Lights;
  * @author Phoenix Enero
  */
 public class VoxelWorld {
-	public int ViewDistance;
-	public Chunk[][] activeChunks;
-	public int xPos;
-	public int yPos;
+	private int ViewDistance;
+	private Chunk[][] activeChunks;
+	private int xPos;
+	private int yPos;
 	public final long worldSeed;
-	public WorldUtils worldGen;
-	public PerspectiveCamera mainCamera;
+	private WorldUtils worldGen;
+	private PerspectiveCamera mainCamera;
 	public VoxelCamInputController camController;
 
 	/**
@@ -39,7 +39,7 @@ public class VoxelWorld {
 		mainCamera.lookAt(0, 0, 0);
 		mainCamera.update();
 		
-		camController = new VoxelCamInputController(mainCamera);
+		camController = new VoxelCamInputController(mainCamera, 512);
 		camController.translateUnits = 128f;
 		
 		for (int z=0; z < 2*viewDistance+1; z++)
@@ -104,10 +104,13 @@ public class VoxelWorld {
 	 * @param lights the lights for lighting... duh.
 	 */
 	public void renderChunks(ModelBatch batch, Lights lights) {
+		camController.update();
+		batch.begin(mainCamera);
 		for (int z=0; z < 2*ViewDistance+1; z++) {
 			for (int x=0; x < 2*ViewDistance+1; x++) {
 				batch.render(activeChunks[z][x].chunkInstance, lights);
 			}
 		}
+		batch.end();
 	}
 }
