@@ -21,14 +21,14 @@ public class MainScreen implements Screen {
 		batch = new ModelBatch();
 		
 		lights = new Lights();
-        lights.ambientLight.set(0.4f, 0.4f, 0.4f, 1f);
-        lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+		lights.ambientLight.set(0.4f, 0.4f, 0.4f, 1f);
+    	lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
         
-        TestWorld = new VoxelWorld(4, 1);
-        TestWorld.rebuildChunks();
-        TestWorld.printChunks();
+		TestWorld = new VoxelWorld(2, 1);
+		TestWorld.rebuildChunks();
+		TestWorld.printChunks();
         
-        Gdx.input.setInputProcessor(TestWorld.camController);
+    	Gdx.input.setInputProcessor(TestWorld.camController);
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class MainScreen implements Screen {
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
         
-        TestWorld.renderChunks(batch, lights);
+		TestWorld.renderChunks(batch, lights);
 	}
 
 	@Override
